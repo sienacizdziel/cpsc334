@@ -1,6 +1,6 @@
 // dimensions
 let screenHeight = 766;
-let screenWidth = 4078 / 2;
+let screenWidth = 4078;
 let numScreens = 3;
 let blocks = []
 

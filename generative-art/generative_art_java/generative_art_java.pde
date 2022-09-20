@@ -1,7 +1,7 @@
 // dimensions
 int screenHeight = 766;
-int screenWidth = 1350 * 6;
-//int screenWidth = 2000;
+//int screenWidth = 1350 * 6;
+int screenWidth = 2000;
 int numScreens = 6;
 int[] blocks = new int[numScreens];
 
@@ -22,8 +22,8 @@ float dx;
 
 void setup() { 
   surface.setSize(screenWidth, screenHeight);
-  surface.setLocation(1700, 0);
-  fullScreen();
+  //surface.setLocation(1700, 0);
+  //fullScreen();
   noFill();
   frameRate(20);
   dx = (TWO_PI / 500.0) * 3; 
@@ -95,10 +95,10 @@ void draw() {
 }
 
 void createScreenSplits() {
-  strokeWeight(0);
-  stroke(0);
   for (int i = 0; i < numScreens; i++) {
-    rect(screenWidth / numScreens * i, 0, screenWidth / numScreens, screenHeight);
+    strokeWeight(0);
+    stroke(0);
+    //rect(screenWidth / numScreens * i, 0, screenWidth / numScreens, screenHeight);
     blocks[i] = screenWidth / numScreens * i;
   }
 }
@@ -107,18 +107,12 @@ void calcWave() {
   theta += 0.02; 
   float y = theta;
   for (int block = 0; block < numScreens; block++) {
-    if (block == 4 || block == 3) {
-      print("first", y);
-      y += (TWO_PI / 500.0) * 3 / 4;
-      print("second", y);
-    }
     for (int i = 0; i < waveValues.length / numScreens; i++) {
       waveValues[waveValues.length / numScreens * block + i] = sin(y) * 75;
-      y += dx;
       if (block == 4 || block == 3) {
-        print("first", y);
-        //y += PI / 3 * 500;
-        print("second", y);
+        y += dx / 2;
+      } else {
+        y += dx;
       }
     }
   }
@@ -128,10 +122,10 @@ void calcWave() {
 void renderWave(int translateX) {
   for (int i = 0; i < numScreens; i++) {
     for (int x = 0; x < waveValues.length / numScreens; x++) {
-      ellipse(translateX + waveValues[waveValues.length / numScreens + x] + blocks[i], x * numWaves, 40, 40);
+      ellipse(translateX + waveValues[waveValues.length / numScreens * i + x] + blocks[i], x * numWaves, 40, 40);
     }
     if (i + 1 != numScreens) {
-      coverBlock(i + 1);
+      //coverBlock(i + 1);
     }
     strokeWeight(10);
   }

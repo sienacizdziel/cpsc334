@@ -1,6 +1,6 @@
 // dimensions
 int screenHeight = 766;
-int screenWidth = 1350 * 6;
+int screenWidth = 1365 * 6;
 //int screenWidth = 2000;
 int numScreens = 6;
 int[] blocks = new int[numScreens];
@@ -18,13 +18,13 @@ float dx;
 // sand
 int[] sandValues = new int[20];
 int[] sand = {250, 231, 207};
-int numSandBoxes = 40;
+int numSandBoxes = 50;
 int[][] sandHues = {{240, 222, 180}, {213, 194, 149}, {194, 178, 128}, {247, 231, 180}};
 int[][] sandBoxColors = new int[numSandBoxes][4];
 float[][] sandBoxVals = new float[numSandBoxes][4];
 
 // umbrellas
-int numUmbrellas = 100;
+int numUmbrellas = 65;
 int[][] umbrellaColors = new int[numUmbrellas][4];
 float[][] umbrellaLocations = new float[numUmbrellas][2];
 int[] umbrellaSizes = new int[numUmbrellas];
@@ -33,8 +33,8 @@ boolean[] umbrellaOpening = new boolean[numUmbrellas];
 
 void setup() { 
   surface.setSize(screenWidth, screenHeight);
-  //surface.setLocation(1700, 0);
-  //fullScreen();
+  surface.setLocation(1740, 0);
+  fullScreen();
   noFill();
   frameRate(20);
   dx = (TWO_PI / 500.0) * 3; 
@@ -52,11 +52,12 @@ void setup() {
     umbrellaSizes[i] = 50;
   }
   
+  // initializing sand values
   for (int i = 0; i < numSandBoxes; i++) {
     int sandHue[] = sandHues[floor(random(0, sandHues.length))];
     int transparency = floor(random(1.5, 2.0) * 100);
     fill(sandHue[0], sandHue[1], sandHue[2], transparency);
-    float sandBoxVal[] = {random(1) * screenWidth, random(1) * screenHeight, random(1) * screenWidth, random(1) * screenHeight};
+    float sandBoxVal[] = {random(1) * screenWidth, random(1) * screenHeight, 200, 200};
     rect(sandBoxVal[0], sandBoxVal[1], sandBoxVal[2], sandBoxVal[3]);
     int sandBoxColor[] = {sandHue[0], sandHue[1], sandHue[2], transparency};
     sandBoxColors[i] = sandBoxColor;
@@ -91,7 +92,7 @@ void draw() {
 
   for (int i = 0; i < umbrellaColors.length; i++) {
     if (umbrellaColors[i] == null) {
-      int[] c = {floor(random(255)), floor(random(255)), floor(random(255)), floor(random(2, 2.55) * 100)};
+      int[] c = {floor(random(255)), floor(random(255)), floor(random(255)), 255};
       umbrellaColors[i] = c;
     }
 
@@ -101,7 +102,7 @@ void draw() {
       location[1] = random(1);
       umbrellaLocations[i] = location;
     }
-    fill(umbrellaColors[i][0], umbrellaColors[i][1], umbrellaColors[i][2], umbrellaColors[i][3]);
+    fill(umbrellaColors[i][0], umbrellaColors[i][1], umbrellaColors[i][2]);
     strokeWeight(0);
 
     pushMatrix();
@@ -166,24 +167,23 @@ void calcWave() {
   float y = theta;
   for (int block = 0; block < numScreens; block++) {
     for (int i = 0; i < waveValues.length / numScreens; i++) {
-      waveValues[waveValues.length / numScreens * block + i] = sin(y) * 75;
-      if (block == 4 || block == 3) {
-        y += dx / 2;
-      } else {
-        y += dx;
+      float shift = 1;
+      if (block == 4 || block == 5 || block == 3) {
+        shift = 4;
+      } 
+      if (block == 1) {
+        shift = 6;
       }
+      waveValues[waveValues.length / numScreens * block + i] = sin(y) * 75 + dx / shift;
+      y += dx;
     }
   }
-  // insert delay here
 }
 
 void renderWave(int translateX) {
   for (int i = 0; i < numScreens; i++) {
     for (int x = 0; x < waveValues.length / numScreens; x++) {
       ellipse(translateX + waveValues[waveValues.length / numScreens * i + x] + blocks[i], x * numWaves, 40, 40);
-    }
-    if (i + 1 != numScreens) {
-      //coverBlock(i + 1);
     }
   }
 }

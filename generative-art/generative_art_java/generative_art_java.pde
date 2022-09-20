@@ -29,7 +29,7 @@ boolean[] umbrellaOpening = new boolean[numUmbrellas];
 
 void setup() { 
   surface.setSize(screenWidth, screenHeight);
-  //surface.setLocation(1700, 0);
+  surface.setLocation(1700, 225);
   //fullScreen();
   noFill();
   frameRate(20);

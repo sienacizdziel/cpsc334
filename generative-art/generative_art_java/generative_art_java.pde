@@ -18,10 +18,14 @@ float dx;
 // sand
 int[] sandValues = new int[20];
 int[] sand = {250, 231, 207};
+int numSandBoxes = 40;
+int[][] sandHues = {{240, 222, 180}, {213, 194, 149}, {194, 178, 128}, {247, 231, 180}};
+int[][] sandBoxColors = new int[numSandBoxes][4];
+float[][] sandBoxVals = new float[numSandBoxes][4];
 
 // umbrellas
-int numUmbrellas = 80;
-int[][] umbrellaColors = new int[numUmbrellas][3];
+int numUmbrellas = 100;
+int[][] umbrellaColors = new int[numUmbrellas][4];
 float[][] umbrellaLocations = new float[numUmbrellas][2];
 int[] umbrellaSizes = new int[numUmbrellas];
 boolean[] umbrellaClosing = new boolean[numUmbrellas];
@@ -29,7 +33,7 @@ boolean[] umbrellaOpening = new boolean[numUmbrellas];
 
 void setup() { 
   surface.setSize(screenWidth, screenHeight);
-  surface.setLocation(1700, 225);
+  //surface.setLocation(1700, 0);
   //fullScreen();
   noFill();
   frameRate(20);
@@ -47,17 +51,30 @@ void setup() {
     umbrellaLocations[i] = null;
     umbrellaSizes[i] = 50;
   }
+  
+  for (int i = 0; i < numSandBoxes; i++) {
+    int sandHue[] = sandHues[floor(random(0, sandHues.length))];
+    int transparency = floor(random(1.5, 2.0) * 100);
+    fill(sandHue[0], sandHue[1], sandHue[2], transparency);
+    float sandBoxVal[] = {random(1) * screenWidth, random(1) * screenHeight, random(1) * screenWidth, random(1) * screenHeight};
+    rect(sandBoxVal[0], sandBoxVal[1], sandBoxVal[2], sandBoxVal[3]);
+    int sandBoxColor[] = {sandHue[0], sandHue[1], sandHue[2], transparency};
+    sandBoxColors[i] = sandBoxColor;
+    sandBoxVals[i] = sandBoxVal;
+  }
 }
 
 void draw() {
   stroke(34, 34, 87);
-  strokeWeight(1);
-  fill(sand[0], sand[1], sand[2]);
+  strokeWeight(0);
   background(sand[0], sand[1], sand[2]);
   createScreenSplits();
   
-  //fill(sand[0], sand[1], sand[2]);
-  //rect(blocks[0] + 450, 0, 100, screenHeight);
+  for (int i = 0; i < numSandBoxes; i++) {
+    fill(sandBoxColors[i][0], sandBoxColors[i][1], sandBoxColors[i][2], sandBoxColors[i][3]);
+    rect(sandBoxVals[i][0], sandBoxVals[i][1], sandBoxVals[i][2], sandBoxVals[i][3]);
+  }
+  
   int waveCount = 0;
   for (int i = blocks[0] + 500; i < blocks[0] + 800; i += 60) {
     strokeWeight(20);
@@ -74,7 +91,7 @@ void draw() {
 
   for (int i = 0; i < umbrellaColors.length; i++) {
     if (umbrellaColors[i] == null) {
-      int[] c = {floor(random(255)), floor(random(255)), floor(random(255))};
+      int[] c = {floor(random(255)), floor(random(255)), floor(random(255)), floor(random(2, 2.55) * 100)};
       umbrellaColors[i] = c;
     }
 
@@ -84,7 +101,7 @@ void draw() {
       location[1] = random(1);
       umbrellaLocations[i] = location;
     }
-    fill(umbrellaColors[i][0], umbrellaColors[i][1], umbrellaColors[i][2]);
+    fill(umbrellaColors[i][0], umbrellaColors[i][1], umbrellaColors[i][2], umbrellaColors[i][3]);
     strokeWeight(0);
 
     pushMatrix();
@@ -104,7 +121,7 @@ void draw() {
       umbrellaClosing[i] = false;
       float[] location = {random(1), random(1)};
       umbrellaLocations[i] = location;
-      int[] c = {floor(random(255)), floor(random(255)), floor(random(255))};
+      int[] c = {floor(random(255)), floor(random(255)), floor(random(255)), floor(random(0.5, 1) * 100)};
       umbrellaColors[i] = c;
       umbrellaOpening[i] = true;
     }
@@ -113,6 +130,14 @@ void draw() {
         umbrellaClosing[i] = true;
       }
     }
+      float angle = TWO_PI / 8;
+      for (float a = 0; a < TWO_PI; a += angle) {
+        float sx = 0 + cos(a) * (umbrellaSizes[i] - 5);
+        float sy = 0 + sin(a) * (umbrellaSizes[i] - 5);
+        stroke(0);
+        strokeWeight(0.5);
+        line(sx, sy, 0, 0);
+      }
     popMatrix();
     
     pushMatrix();
@@ -132,7 +157,6 @@ void createScreenSplits() {
   for (int i = 0; i < numScreens; i++) {
     strokeWeight(0);
     stroke(0);
-    //rect(screenWidth / numScreens * i, 0, screenWidth / numScreens, screenHeight);
     blocks[i] = screenWidth / numScreens * i;
   }
 }
@@ -173,7 +197,6 @@ void polygon(int x, int y, int radius, int npoints) {
     vertex(sx, sy);
     stroke(0);
     strokeWeight(1);
-    //line(x - radius * sin(a) - 10, y, sx, sy);
   }
   endShape(CLOSE);
 }

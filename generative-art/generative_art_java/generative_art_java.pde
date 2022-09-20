@@ -1,118 +1,102 @@
 // dimensions
 int screenHeight = 766;
-int screenWidth = 4078;
+int screenWidth = 1360 * 6;
+//int screenWidth = 2000;
 int numScreens = 6;
 int[] blocks = new int[numScreens];
 
-// parameters
 int t = 0;
 int fr = 20;
-int numWaves = 3;
-float[] waveValues = new float[(int)Math.floor(screenHeight / numWaves) * 2];
-//int[][] oceanColors = {{7, 74, 83}, {7, 115, 149}, "#5b9299", "#8dc1cf", "#aadbe1", "#b8bec0"};
-//String[] sandColors = {"#f6d7b0", "#f2d2a9", "#eccca2", "#e7c496", "#e1bf92"};
+int numWaves = 8;
+float[] waveValues = new float[(int)Math.floor(screenHeight / numWaves) * numScreens + 40];
+int[][] oceanColors = {{7, 74, 83}, {7, 115, 149}, {91, 146, 153}, {141, 193, 207}, {170, 219, 225}, {184, 190, 192}};
 int[] sandValues = new int[20];
-String sand = null;
-int numUmbrellas = 40;
-Object[] umbrellaColors = new Object[numUmbrellas];
+int[] sand = {250, 231, 207};
+int numUmbrellas = 80;
+int[][] umbrellaColors = new int[numUmbrellas][3];
 float[][] umbrellaLocations = new float[numUmbrellas][2];
 String screen = "left";
-String[] waveColors = new String[20];
-int theta = 0;
+int[][] waveColors = new int[20][3];
+float theta = 0;
 float dx;
 
 void setup() { 
   surface.setSize(screenWidth, screenHeight);
-  surface.setLocation(-screenWidth, 0);
+  //surface.setLocation(1700, 0);
   //fullScreen();
   noFill();
   frameRate(20);
   dx = (TWO_PI / 500.0) * 3; 
   for (int i = 0; i < 20; i ++) {
-    //waveColors[i] = oceanColors[round(random(oceanColors.length - 1))];
+    waveColors[i] = oceanColors[round(random(oceanColors.length - 1))];
   }
-  //sand = sandColors[floor(random(5))];
-  //background(sand);
+  background(sand[0], sand[1], sand[2]);
+  
+  // initializing umbrella values to null
+  for (int i = 0; i < umbrellaColors.length; i++) {
+    umbrellaColors[i] = null;
+  }
+  for (int i = 0; i < umbrellaLocations.length; i++) {
+    umbrellaLocations[i] = null;
+  }
 }
 
 void draw() {
-  stroke(255);
+  stroke(34, 34, 87);
   strokeWeight(1);
-  //fill(sand);
-  //background(sand);
+  fill(sand[0], sand[1], sand[2]);
+  background(sand[0], sand[1], sand[2]);
   createScreenSplits();
 
-  if (screen == "left") {
-    // for (int block = 0; block < 2; block += 1) {
-      int waveCount = 0;
-      for (int i = blocks[0] + 500; i < blocks[0] + 800; i += 80) {
-        strokeWeight(10);
-        if (t % 20 == 0) {
-          //waveColors[waveCount] = oceanColors[round(random(oceanColors.length - 1))];
-        }
-        //fill(waveColors[waveCount]);
-        //stroke(waveColors[waveCount]);
-        calcWave();
-        renderWave(i, 1, 2);
-        waveCount++;
-      }
-
-      noFill();
-      strokeWeight(20);
-      stroke(255);
-      curve(screenWidth, 50, screenWidth - 10, screenHeight, screenWidth - (screenWidth / numScreens / 2) + 50, 0, 200, 200);
-      stroke(0);
-      curve(5, 26, 0, 73, 24, 0, 73, 61, 0, 15, 65, 0);
-      stroke(255, 102, 0);
-      curve(73, 24, 0, 73, 61, 0, 15, 65, 0, 15, 65, 0);
-    // }
-  } else {
-    int waveCount = 0;
-    for (int i = blocks[1] + 500; i < blocks[1] + 800; i += 80) {
-      strokeWeight(10);
-      if (t % 20 == 0) {
-        //waveColors[waveCount] = oceanColors[round(random(oceanColors.length - 1))];
-      }
-      //fill(waveColors[waveCount]);
-      //stroke(waveColors[waveCount]);
-      calcWave();
-      renderWave(i, 2, 2);
-      waveCount++;
+  int waveCount = 0;
+  for (int i = blocks[0] + 500; i < blocks[0] + 800; i += 80) {
+    strokeWeight(10);
+    if (t % 15 == 0) {
+      waveColors[waveCount] = oceanColors[round(random(oceanColors.length - 1))];
     }
+    fill(waveColors[waveCount][0], waveColors[waveCount][1], waveColors[waveCount][2]);
+    stroke(waveColors[waveCount][0], waveColors[waveCount][1], waveColors[waveCount][2]);
+    calcWave();
+    renderWave(i);
+    waveCount++;
   }
 
   for (int i = 0; i < umbrellaColors.length; i++) {
     if (umbrellaColors[i] == null) {
-      umbrellaColors[i] = color(floor(random(255)), floor(random(255)), floor(random(255)));
+      int[] c = {floor(random(255)), floor(random(255)), floor(random(255))};
+      umbrellaColors[i] = c;
     }
 
     if (umbrellaLocations[i] == null) {
       float[] location = {random(1), random(1)};
       umbrellaLocations[i] = location;
     }
-    //fill(umbrellaColors[i]);
+    fill(umbrellaColors[i][0], umbrellaColors[i][1], umbrellaColors[i][2]);
     strokeWeight(0);
 
-    push();
+    pushMatrix();
     translate(width * umbrellaLocations[i][0], height * umbrellaLocations[i][1]);
     rotate(frameCount / 30.0);
     polygon(0, 0, 50, 8);
-    pop();
-
-    stroke(255);
+    popMatrix();
+    
+    stroke(0, 0, 0);
     strokeWeight(10);
-
-    push();
+    fill(0, 0, 0);
+    
+    pushMatrix();
     translate(width * umbrellaLocations[i][0], height * umbrellaLocations[i][1]);
     ellipse(0, 0, 1, 1);
-    pop();
+    popMatrix();
   }
 
-  // frameRate(fr);
-  t++;
+   frameRate(fr);
+   t++;
 }
 
 void createScreenSplits() {
+  strokeWeight(2);
+  stroke(0);
   for (int i = 0; i < numScreens; i++) {
     rect(screenWidth / numScreens * i, 0, screenWidth / numScreens, screenHeight);
     blocks[i] = screenWidth / numScreens * i;
@@ -121,39 +105,32 @@ void createScreenSplits() {
 
 void calcWave() {
   theta += 0.02; 
-  int y = theta;
-  for (int i = 0; i < waveValues.length / 2; i++) {
-    waveValues[i] = sin(y) * 75;
-    y += dx;
+  float y = theta;
+  for (int block = 0; block < numScreens; block++) {
+    for (int i = 0; i < waveValues.length; i++) {
+      waveValues[i] = sin(y) * 75;
+      y += dx;
+    }
   }
-  y += 10;
-  for (int i = waveValues.length / 2; i < waveValues.length; i++) {
-    waveValues[i] = screenWidth / numScreens + sin(y) * 75;
-    y += dx;
-  }
+  // insert delay here
 }
 
-void renderWave(int translateX, int block1, int block2) {
-  for (int x = 0; x < waveValues.length / 2; x++) {
-    ellipse(translateX + waveValues[x], x * numWaves, 40, 40);
+void renderWave(int translateX) {
+  for (int i = 0; i < numScreens; i++) {
+    for (int x = 0; x < waveValues.length / numScreens; x++) {
+      ellipse(translateX + waveValues[waveValues.length / numScreens + x] + blocks[i], x * numWaves, 40, 40);
+    }
+    if (i + 1 != numScreens) {
+      coverBlock(i + 1);
+    }
+    strokeWeight(10);
   }
-  coverBlock(block1);
-  strokeWeight(10);
-
-  for (int x = 0; x < waveValues.length / 2; x++) {
-    ellipse(translateX + waveValues[waveValues.length / 2 + x], x * numWaves, 40, 40);
-  }
-  coverBlock(block2);
-
-  // for (int x = 0; x < waveValues.length; x++) {
-  //   ellipse(translateX * 2 + waveValues[x], x * numWaves, 40, 40);
-  // }
 }
 
 void polygon(int x, int y, int radius, int npoints) {
   float angle = TWO_PI / npoints;
   beginShape();
-  for (int a = 0; a < TWO_PI; a += angle) {
+  for (float a = 0; a < TWO_PI; a += angle) {
     float sx = x + cos(a) * radius;
     float sy = y + sin(a) * radius;
     vertex(sx, sy);
@@ -163,8 +140,8 @@ void polygon(int x, int y, int radius, int npoints) {
 
 void coverBlock(int block) {
   strokeWeight(0);
-  //fill(sand);
-  rect(blocks[block], 0, screenWidth / numScreens / 2, screenHeight);
+  fill(sand[0], sand[1], sand[2]);
+  rect(blocks[block], 0, screenWidth / numScreens / 4, screenHeight);
 }
 
 void keyPressed() {

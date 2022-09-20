@@ -1,7 +1,7 @@
 // dimensions
 int screenHeight = 766;
-//int screenWidth = 1350 * 6;
-int screenWidth = 2000;
+int screenWidth = 1350 * 6;
+//int screenWidth = 2000;
 int numScreens = 6;
 int[] blocks = new int[numScreens];
 
@@ -22,8 +22,8 @@ float dx;
 
 void setup() { 
   surface.setSize(screenWidth, screenHeight);
-  //surface.setLocation(1700, 0);
-  //fullScreen();
+  surface.setLocation(1700, 0);
+  fullScreen();
   noFill();
   frameRate(20);
   dx = (TWO_PI / 500.0) * 3; 
@@ -107,12 +107,14 @@ void calcWave() {
   float y = theta;
   for (int block = 0; block < numScreens; block++) {
     for (int i = 0; i < waveValues.length / numScreens; i++) {
-      waveValues[waveValues.length / numScreens * block + i] = sin(y) * 75;
+      float waveFactor = 1.00;
       if (block == 4 || block == 3) {
-        y += dx / 2;
-      } else {
-        y += dx;
-      }
+        waveFactor = 3.00;
+      } else if (block == 1) {
+        waveFactor = 0.25;
+      } 
+      waveValues[waveValues.length / numScreens * block + i] = sin(y) * 75 + dx / waveFactor;
+      y += dx;
     }
   }
   // insert delay here
@@ -120,6 +122,9 @@ void calcWave() {
 
 void renderWave(int translateX) {
   for (int i = 0; i < numScreens; i++) {
+    if (i == 1) {
+      stroke(200);
+    }
     for (int x = 0; x < waveValues.length / numScreens; x++) {
       ellipse(translateX + waveValues[waveValues.length / numScreens * i + x] + blocks[i], x * numWaves, 40, 40);
     }

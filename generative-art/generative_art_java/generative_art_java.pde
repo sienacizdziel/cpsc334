@@ -1,6 +1,6 @@
 // dimensions
 int screenHeight = 766;
-int screenWidth = 1360 * 6;
+int screenWidth = 1350 * 6;
 //int screenWidth = 2000;
 int numScreens = 6;
 int[] blocks = new int[numScreens];
@@ -22,8 +22,8 @@ float dx;
 
 void setup() { 
   surface.setSize(screenWidth, screenHeight);
-  //surface.setLocation(1700, 0);
-  //fullScreen();
+  surface.setLocation(1700, 0);
+  fullScreen();
   noFill();
   frameRate(20);
   dx = (TWO_PI / 500.0) * 3; 
@@ -49,8 +49,8 @@ void draw() {
   createScreenSplits();
 
   int waveCount = 0;
-  for (int i = blocks[0] + 500; i < blocks[0] + 800; i += 80) {
-    strokeWeight(10);
+  for (int i = blocks[0] + 500; i < blocks[0] + 800; i += 60) {
+    strokeWeight(20);
     if (t % 15 == 0) {
       waveColors[waveCount] = oceanColors[round(random(oceanColors.length - 1))];
     }
@@ -95,7 +95,7 @@ void draw() {
 }
 
 void createScreenSplits() {
-  strokeWeight(2);
+  strokeWeight(0);
   stroke(0);
   for (int i = 0; i < numScreens; i++) {
     rect(screenWidth / numScreens * i, 0, screenWidth / numScreens, screenHeight);
@@ -107,9 +107,19 @@ void calcWave() {
   theta += 0.02; 
   float y = theta;
   for (int block = 0; block < numScreens; block++) {
-    for (int i = 0; i < waveValues.length; i++) {
-      waveValues[i] = sin(y) * 75;
+    if (block == 4 || block == 3) {
+      print("first", y);
+      y += (TWO_PI / 500.0) * 3 / 4;
+      print("second", y);
+    }
+    for (int i = 0; i < waveValues.length / numScreens; i++) {
+      waveValues[waveValues.length / numScreens * block + i] = sin(y) * 75;
       y += dx;
+      if (block == 4 || block == 3) {
+        print("first", y);
+        //y += PI / 3 * 500;
+        print("second", y);
+      }
     }
   }
   // insert delay here

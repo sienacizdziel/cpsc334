@@ -46,7 +46,7 @@ function draw() {
       waveCount = 0;
       for (let i = blocks[0] + 500; i < blocks[0] + 800; i += 80) {
         strokeWeight(10);
-        if (t % 10 == 0) {
+        if (t % 20 == 0) {
           waveColors[waveCount] = oceanColors[round(random(oceanColors.length - 1))];
         }
         fill(waveColors[waveCount]);
@@ -69,7 +69,7 @@ function draw() {
     waveCount = 0;
     for (let i = blocks[1] + 500; i < blocks[1] + 800; i += 80) {
       strokeWeight(10);
-      if (t % 10 == 0) {
+      if (t % 20 == 0) {
         waveColors[waveCount] = oceanColors[round(random(oceanColors.length - 1))];
       }
       fill(waveColors[waveCount]);

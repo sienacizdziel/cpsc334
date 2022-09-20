@@ -18,7 +18,7 @@ let umbrellaColors = new Array(numUmbrellas).fill(null);
 let umbrellaLocations = new Array(numUmbrellas).fill(null);
 let screen = "left";
 
-const waveColors = [];
+const waveColors = new Array(20);
 let theta = 0;
 
 function setup() {
@@ -26,8 +26,8 @@ function setup() {
   noFill();
   frameRate(20);
   dx = (TWO_PI / 500.0) * 3; 
-  for (let i = blocks[5]; i < blocks[5] + 2 * screenWidth / numScreens; i += 20) {
-    waveColors.add(oceanColors[round(random(oceanColors.length - 1))]);
+  for (let i = 0; i < 20; i ++) {
+    waveColors[i] = oceanColors[round(random(oceanColors.length - 1))];
   }
   sand = sandColors[floor(random(5))];
   background(sand);
@@ -43,17 +43,41 @@ function draw() {
 
   if (screen == "left") {
     // for (let block = 0; block < 2; block += 1) {
+      waveCount = 0;
       for (let i = blocks[0] + 500; i < blocks[0] + 800; i += 80) {
         strokeWeight(10);
         if (t % 10 == 0) {
-          waveColors[i - blocks[0]] = oceanColors[round(random(oceanColors.length - 1))];
+          waveColors[waveCount] = oceanColors[round(random(oceanColors.length - 1))];
         }
-        fill(waveColors[i - blocks[0]]);
-        stroke(waveColors[i - blocks[0]]);
+        fill(waveColors[waveCount]);
+        stroke(waveColors[waveCount]);
         calcWave();
-        renderWave(i);
+        renderWave(i, 1, 2);
+        waveCount++;
       }
+
+      noFill();
+      strokeWeight(20);
+      stroke('black');
+      curve(screenWidth, 50, screenWidth - 10, screenHeight, screenWidth - (screenWidth / numScreens / 2) + 50, 0, 200, 200);
+      stroke(0);
+      curve(5, 26, 0, 73, 24, 0, 73, 61, 0, 15, 65, 0);
+      stroke(255, 102, 0);
+      curve(73, 24, 0, 73, 61, 0, 15, 65, 0, 15, 65, 0);
     // }
+  } else {
+    waveCount = 0;
+    for (let i = blocks[1] + 500; i < blocks[1] + 800; i += 80) {
+      strokeWeight(10);
+      if (t % 10 == 0) {
+        waveColors[waveCount] = oceanColors[round(random(oceanColors.length - 1))];
+      }
+      fill(waveColors[waveCount]);
+      stroke(waveColors[waveCount]);
+      calcWave();
+      renderWave(i, 2, 2);
+      waveCount++;
+    }
   }
 
   for (let i = 0; i < umbrellaColors.length; i++) {
@@ -111,17 +135,17 @@ function rotate() {
 
 }
 
-function renderWave(translateX) {
+function renderWave(translateX, block1, block2) {
   for (let x = 0; x < waveValues.length / 2; x++) {
     ellipse(translateX + waveValues[x], x * numWaves, 40, 40);
   }
-  coverBlock(1);
+  coverBlock(block1);
   strokeWeight(10);
 
   for (let x = 0; x < waveValues.length / 2; x++) {
     ellipse(translateX + waveValues[waveValues.length / 2 + x], x * numWaves, 40, 40);
   }
-  coverBlock(2);
+  coverBlock(block2);
 
   // for (let x = 0; x < waveValues.length; x++) {
   //   ellipse(translateX * 2 + waveValues[x], x * numWaves, 40, 40);
@@ -170,5 +194,7 @@ function coverBlock(block) {
 function keyPressed() {
   if (keyCode == ENTER) {
     screen = "right";
+  } else if (keyCode == BACKSPACE) {
+    screen = "left";
   }
 }

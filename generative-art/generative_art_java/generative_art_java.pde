@@ -80,13 +80,12 @@ void draw() {
     polygon(0, 0, 50, 8);
     popMatrix();
     
-    stroke(0, 0, 0);
-    strokeWeight(10);
-    fill(0, 0, 0);
-    
     pushMatrix();
+    stroke(0);
+    strokeWeight(2);
+    fill(0);
     translate(width * umbrellaLocations[i][0], height * umbrellaLocations[i][1]);
-    ellipse(0, 0, 1, 1);
+    ellipse(0, 0, 6, 6);
     popMatrix();
   }
 

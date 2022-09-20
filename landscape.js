@@ -146,32 +146,6 @@ function renderWave(translateX, block1, block2) {
     ellipse(translateX + waveValues[waveValues.length / 2 + x], x * numWaves, 40, 40);
   }
   coverBlock(block2);
-
-  // for (let x = 0; x < waveValues.length; x++) {
-  //   ellipse(translateX * 2 + waveValues[x], x * numWaves, 40, 40);
-  // }
-}
-
-class Umbrella {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.color = null;
-  }
-
-  create() {
-    this.color = color(floor(random(255)), floor(random(255)), floor(random(255)));
-  }
-
-  update() {
-    strokeWeight(0);
-    stroke(this.color);
-    fill(this.color);
-
-    strokeWeight(10);
-    stroke('black');
-    ellipse(this.x + 20, this.y + 20, 50, 50);
-  }
 }
 
 function polygon(x, y, radius, npoints) {

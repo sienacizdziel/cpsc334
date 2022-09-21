@@ -2,7 +2,9 @@ Module 1: Generative Art
 A Dynamic Beach Landscape
 Siena Cizdziel
 
-This is a dynamic generative art piece of an abstract aerial view of a beach. The code is written in Java in Processing (generative_art_java.pde) inside of the generative_art_java folder in this repository. Note that this repo also contains obsolete code written in p5.js, which I couldn't bear to delete so I saved for posterity. 
+This is a dynamic generative art piece of an abstract aerial view of a beach. The code is written in Java in Processing (generative_art_java.pde) inside of the generative_art_java folder in this repository. 
+
+Note that this repo also contains obsolete code written in p5.js, which I couldn't bear to delete so I saved for posterity. 
 
 To run the code: 
 * Open generative_art_java.pde (located inside the generative_art_java folder in this repo) in the Processing environment of the LEEDS computer.

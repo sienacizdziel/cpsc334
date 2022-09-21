@@ -14,6 +14,8 @@ In `draw()` is the bulk of the program. `createScreenSplits()` splits the screen
 
 Shapes in the sand are drawn first, anywhere on the screen. Waves are drawn using `calcWave()` and `renderWave()`, which uses parametrization and trigonometry to create sine waves that go from the center bottom to the top of each screen (again, accounting for 90 degree angles). Every 15 frames, the color changes according to the saved color scheme. Umbrella attributes are similarly saved, including boolean indicators for whether or not they are closing. Randomness plays a factor in when umbrellas open, close, move locations, and change colors. 
 
+To generalize this code to different displays, you can change the screen height, screen width, and number of screens, using the `screenHeight`, `screenWidth`, and `numScreens` global variables. Changing the screen start location would require changing the `surface.setLocation()` values located in `setup()`. 
+
 # Running the Code
 * Open `generative_art_java.pde` (located inside the `generative_art_java` folder in this repo) in the Processing environment of the LEEDS computer.
 * Turn on all projectors and ensure HDMI display cables are secured. 

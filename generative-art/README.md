@@ -12,3 +12,6 @@ To run the code:
 * Click the play button at the top left of the Processing environment. 
 
 The code is written to then automatically generate the art and display it at the appropriate location on the windows of LEEDS and with the corresponding size of the displays. 
+
+Design of the code:
+

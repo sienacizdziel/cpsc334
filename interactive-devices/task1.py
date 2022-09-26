@@ -3,7 +3,8 @@ import time
 
 switchPin = 17
 buttonPin = 23
-joystickPin = 26
+joystickPinX = 26
+joystickPinY = 16
 ledPin1 = 18
 ledPin1State = GPIO.LOW
 ledPin2 = 6
@@ -28,12 +29,14 @@ def button_callback(channel):
             ledPin2State = GPIO.HIGH
         else:
             ledPin2State = GPIO.LOW
+        GPIO.output(ledPin2, ledPin2State)
 
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(switchPin, GPIO.IN)
 GPIO.setup(buttonPin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(joystickPin, GPIO.IN)
+GPIO.setup(joystickPinX, GPIO.IN)
+GPIO.setup(joystickPinY, GPIO.IN)
 GPIO.setup(ledPin1, GPIO.OUT)
 GPIO.setup(ledPin2, GPIO.OUT)
 
@@ -51,12 +54,15 @@ else:
 GPIO.output(ledPin1, ledPin1State)
 GPIO.output(ledPin2, ledPin2State)
 
+print(ledPin1State)
+print(ledPin2State)
+
 try:
     while 1:
-        if not GPIO.input(switchPin):
-            print("switch toggled!")
-            print("joystick pin: " + str(GPIO.input(joystickPin)))
-        time.sleep(2)
+        if ledPin1State == GPIO.HIGH and ledPin2State == GPIO.HIGH:
+            print("joystick x: " + str(GPIO.input(joystickPinX)))
+            print("joystick y: " + str(GPIO.input(joystickPinY)))
+        time.sleep(1)
         
 except KeyboardInterrupt:
     GPIO.cleanup()

@@ -1,4 +1,4 @@
-from guizero import App, Text, Drawing
+from guizero import App, Text, Drawing, PushButton
 import serial
 import time
 import RPi.GPIO as GPIO
@@ -13,20 +13,23 @@ GPIO.setup(buttonPin, GPIO.IN)
 GPIO.setup(switchPin, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 
 # color schemes
-night_bg = (54, 48, 98)
+night_bg = (24, 24, 24)
 night_index = 0
-night_colors = [(130, 115, 151), (77, 76, 125), (233, 213, 202)]
-day_bg = (255, 192, 144)
+night_colors = [(135, 88, 255), (92, 184, 228), (242, 242, 242)]
+day_bg = (252, 226, 219)
 day_index = 0
-day_colors = [(127, 183, 126), (177, 215, 180), (247, 246, 220)]
-color = (0, 0, 0)
+day_colors = [(255, 143, 177), (178, 112, 162), (122, 68, 149)]
+color = None
 mode = ""
 
+# point location
+x1 = 30
+y1 = 30
+x2 = 40
+y2 = 40
+
 def general_callback():
-    print("here")
     global day_index, night_index, color, mode
-    text.text_color = color
-    text.value = text.text_color
 
     # switch color mode change
     if (not GPIO.input(switchPin)) and (mode == "night" or mode == ""):
@@ -41,50 +44,63 @@ def general_callback():
         mode = "night"
 
 def button_change():
+    global color, night_index, day_index
+
     # button line color change
-    if GPIO.input(buttonPin) == 1:
-        print("here")
-        #point.bg = "blue"
-    else:
-        print("also here")
-        #point.bg = "green"
+    if GPIO.input(buttonPin) == 0:
+        if mode == "day":
+            color = day_colors[day_index]
+            day_index = (day_index + 1) % 3
+        else:
+            color = night_colors[night_index]
+            night_index = (night_index + 1) % 3
+        d.oval(x1, y1, x2, y2, color=color, outline=False, outline_color=color)
         
 def serial_coords():
+    global x1, y1, x2, y2
+
     # read serial print coordinates
     line = (ser.readline().decode('utf-8').rstrip()).split(" ")
     x = int(line[1][:len(line[1]) - 1])
     y = int(line[3])
+    
+    speed = 0.25
+    if x > 2400:
+        x1 += speed
+        x2 += speed 
+    elif x < 2250:
+        x1 -= speed
+        x2 -= speed
+    if y < -2250:
+        y1 += speed
+        y2 += speed
+    elif y > -2100:
+        y1 -= speed
+        y2 -= speed
+    d.oval(x1, y1, x2, y2, color=color, outline=False, outline_color=color)
     print(x, y)
 
-    #text.value = line
+def exit_program():
+   exit() 
 
 if __name__ == '__main__':
-    app = App('interactive art')
+    # initialize background
+    if not GPIO.input(switchPin):
+        bg = day_bg
+    else:
+        bg = night_bg
+
+    # app settings
+    app = App('interactive art', bg=bg)
     ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
     ser.reset_input_buffer()
+    app.set_full_screen()
 
-    # gpio events
-    # GPIO.add_event_detect(buttonPin, GPIO.RISING, callback=color_change)
-
-    #app.set_full_screen()
-
-    text = Text(app, text="1", color=(233, 213, 202))
-    text.repeat(1000, general_callback)
-
-    # draw line using a point
-    d = Drawing(app)
-    point = d.oval(30, 30, 40, 40, color="black", outline=False, outline_color="black")
+    d = Drawing(app, width="fill", height="fill")
+    d.repeat(1000, general_callback)
     d.repeat(100, button_change)
     d.repeat(1, serial_coords)
 
-    # access serial print from esp32
-    #ser = serial.Serial('/dev/ttylUSB0', 115200, timeout=1)
-    #ser.reset_input_buffer()
-
-    # listen for changes
-    #while True:
-    #    line = ser.readline().decode('utf-8').rstrip()
-
-        
+    d.when_clicked = exit_program
 
     app.display()

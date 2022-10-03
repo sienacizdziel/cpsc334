@@ -61,24 +61,24 @@ def serial_coords():
 
     # read serial print coordinates
     line = (ser.readline().decode('utf-8').rstrip()).split(" ")
+    print(line)
     x = int(line[1][:len(line[1]) - 1])
     y = int(line[3])
     
     speed = 0.25
-    if x > 2400:
+    if x > 2400 and x2 < 800:
         x1 += speed
         x2 += speed 
-    elif x < 2250:
+    elif x < 2250 and x1 > 0:
         x1 -= speed
         x2 -= speed
-    if y < -2250:
+    if y < -2350 and y2 < 480:
         y1 += speed
         y2 += speed
-    elif y > -2100:
+    elif y > -2000 and x != 3587 and y1 > 0:
         y1 -= speed
         y2 -= speed
     d.oval(x1, y1, x2, y2, color=color, outline=False, outline_color=color)
-    print(x, y)
 
 def exit_program():
    exit() 

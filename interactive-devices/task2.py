@@ -27,6 +27,7 @@ x1 = 30
 y1 = 30
 x2 = 40
 y2 = 40
+ovals = []
 
 def general_callback():
     global day_index, night_index, color, mode
@@ -54,10 +55,10 @@ def button_change():
         else:
             color = night_colors[night_index]
             night_index = (night_index + 1) % 3
-        d.oval(x1, y1, x2, y2, color=color, outline=False, outline_color=color)
+        #d.oval(x1, y1, x2, y2, color=color, outline=False, outline_color=color)
         
 def serial_coords():
-    global x1, y1, x2, y2
+    global x1, y1, x2, y2, ovals
 
     # read serial print coordinates
     line = (ser.readline().decode('utf-8').rstrip()).split(" ")
@@ -65,20 +66,35 @@ def serial_coords():
     x = int(line[1][:len(line[1]) - 1])
     y = int(line[3])
     
-    speed = 0.25
-    if x > 2400 and x2 < 800:
+    speed = 1
+    changed = False
+    if x > 0 and x2 < 800:
         x1 += speed
         x2 += speed 
-    elif x < 2250 and x1 > 0:
+        changed = True
+    elif x < -100 and x1 > 0:
         x1 -= speed
         x2 -= speed
-    if y < -2350 and y2 < 480:
+        changed = True
+    if y < 0 and y2 < 480:
         y1 += speed
         y2 += speed
-    elif y > -2000 and x != 3587 and y1 > 0:
+        changed = True
+    elif y > 200 and x != 3587 and y1 > 0:
         y1 -= speed
         y2 -= speed
-    d.oval(x1, y1, x2, y2, color=color, outline=False, outline_color=color)
+        changed = True
+
+    #print(changed)
+    #print(x, y)
+    if not changed:
+        return
+    oval_id = d.oval(x1, y1, x2, y2, color=color, outline=False, outline_color=color)
+    ovals.append(oval_id)
+    if len(ovals) > 10000:
+        d.delete(ovals[0])
+        ovals.remove(ovals[0])
+    #print(ovals)
 
 def exit_program():
    exit() 
@@ -94,9 +110,11 @@ if __name__ == '__main__':
     app = App('interactive art', bg=bg)
     ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
     ser.reset_input_buffer()
-    app.set_full_screen()
+    #app.set_full_screen()
 
     d = Drawing(app, width="fill", height="fill")
+    oval_id = d.oval(x1, y1, x2, y2, color=color, outline=False, outline_color=color)
+    ovals.append(oval_id)
     d.repeat(1000, general_callback)
     d.repeat(100, button_change)
     d.repeat(1, serial_coords)

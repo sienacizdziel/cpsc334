@@ -105,7 +105,7 @@ if __name__ == '__main__':
     app = App('interactive art', bg=bg)
     ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
     ser.reset_input_buffer()
-    #app.set_full_screen()
+    app.set_full_screen()
 
     d = Drawing(app, width="fill", height="fill")
     oval_id = d.oval(x1, y1, x2, y2, color=color, outline=False, outline_color=color)

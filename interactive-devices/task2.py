@@ -55,18 +55,16 @@ def button_change():
         else:
             color = night_colors[night_index]
             night_index = (night_index + 1) % 3
-        #d.oval(x1, y1, x2, y2, color=color, outline=False, outline_color=color)
         
 def serial_coords():
     global x1, y1, x2, y2, ovals
 
     # read serial print coordinates
     line = (ser.readline().decode('utf-8').rstrip()).split(" ")
-    print(line)
     x = int(line[1][:len(line[1]) - 1])
     y = int(line[3])
     
-    speed = 1
+    speed = 0.25
     changed = False
     if x > 0 and x2 < 800:
         x1 += speed
@@ -85,16 +83,13 @@ def serial_coords():
         y2 -= speed
         changed = True
 
-    #print(changed)
-    #print(x, y)
     if not changed:
         return
     oval_id = d.oval(x1, y1, x2, y2, color=color, outline=False, outline_color=color)
     ovals.append(oval_id)
-    if len(ovals) > 10000:
+    if len(ovals) > 7000:
         d.delete(ovals[0])
         ovals.remove(ovals[0])
-    #print(ovals)
 
 def exit_program():
    exit() 

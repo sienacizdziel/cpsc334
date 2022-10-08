@@ -70,7 +70,7 @@ def serial_coords():
         x1 += speed
         x2 += speed 
         changed = True
-    elif x < -100 and x1 > 0:
+    elif x < -200 and x1 > 0:
         x1 -= speed
         x2 -= speed
         changed = True

@@ -12,6 +12,6 @@ To end the program, tap on the screen.
 Inside of this repo, `esp32write.ino` is used to serial write joystick values from the ESP32 (which converted them from analog to digital), uploaded through the Arduino IDE. The bulk of the code for this program is written in `task2.py`, which uses the GUIzero library for graphics, reads from Serial for joystick values, and uses RPi.GPIO to read button and switch values from the Raspberry Pi GPIO. Finally, `interactive-art.sh` is a copy of the brief bash script I wrote that exists on Desktop to allow the user to easily start `task2.py` from Desktop on the display screen of the Raspberry Pi. 
 
 ## Video links:
-Retro sketch 1: https://youtu.be/zJ-sk24o7_Y
+Retro sketch 1: https://youtu.be/oOcqPv6_z58 
 
-Retro sketch 2: https://youtu.be/bmTvXZWNBQ0
+Retro sketch 2: https://www.youtube.com/watch?v=ODixfzhrV0s

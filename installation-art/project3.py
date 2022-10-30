@@ -65,15 +65,15 @@ def general_callback():
         lines = copy.deepcopy(new_dict)
 
     # movement affects line shift speed
-    light_sensitivity = 4
-    speed = 0
+    light_sensitivity = 8
+    speed = 3
     print(prev_light1, light1, prev_light2, light2)
     if prev_light1 > light1 + light1 / light_sensitivity or prev_light1 < light1 / light_sensitivity:
-        speed = -light1 / light_sensitivity
+        speed = -speed
     elif prev_light2 > light2 + light2 / light_sensitivity or prev_light2 < light2 / light_sensitivity:
-        speed = light2 / light_sensitivity
+        speed = speed
     else:
-        pass
+        speed = 0
 
     # shift lines 
     new_dict = {}
@@ -82,6 +82,8 @@ def general_callback():
         if random.randint(0, 1):
             d.delete(line)
             x1, y1, x2, y2, line_color = lines[line]
+            if x2 + speed > 710 or x1 - speed < 0:
+                continue
             new_line_id = d.oval(x1 + speed, y1, x2 + speed, y2, line_color)
             new_dict[new_line_id] = (x1 + speed, y1, x2 + speed, y2, line_color)
         else:

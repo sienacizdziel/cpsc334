@@ -25,11 +25,12 @@ oval_id = None
 # lines
 touch_change = 8
 lines = {}
-size = 10
+size = 100
+width = 3
 
 def general_callback():
     global touch1, touch2, touch3, light1, light2
-    global color, color2, lines
+    global color, color2, lines, size
     global prev_touch1, prev_touch2, prev_touch3, prev_light1, prev_light2
 
     # receive data from esp32
@@ -48,8 +49,8 @@ def general_callback():
     if prev_touch2 > touch2 + touch_change:
         print("touch 2")
         x = random.randint(0, 700)
-        line_id = d.oval(x, 0, x + size, size, color=shape_color_scheme[color2])
-        lines[line_id] = (x, 0, x + size, size, shape_color_scheme[color2])
+        line_id = d.line(x, -size, x, 0, color=shape_color_scheme[color2], width=width)
+        lines[line_id] = (x, -size, x, 0, shape_color_scheme[color2])
     if prev_touch3 > touch3 + touch_change:
         print("touch 3")
         color2 = (color2 + 1) % num_colors2
@@ -58,15 +59,15 @@ def general_callback():
             if random.randint(0, 1):
                 d.delete(line)
                 x1, y1, x2, y2, line_color = lines[line]
-                new_line_id = d.oval(x1, y1, x2, y2, color=shape_color_scheme[color2])
+                new_line_id = d.line(x1, y1, x2, y2, color=shape_color_scheme[color2], width=width)
                 new_dict[new_line_id] = (x1, y1, x2, y2, shape_color_scheme[color2])
             else:
                 new_dict[line] = lines[line]
         lines = copy.deepcopy(new_dict)
 
     # movement affects line shift speed
-    light_sensitivity = 8
-    speed = 3
+    light_sensitivity = 15
+    speed = 5
     print(prev_light1, light1, prev_light2, light2)
     if prev_light1 > light1 + light1 / light_sensitivity or prev_light1 < light1 / light_sensitivity:
         speed = -speed
@@ -84,7 +85,7 @@ def general_callback():
             x1, y1, x2, y2, line_color = lines[line]
             if x2 + speed > 710 or x1 - speed < 0:
                 continue
-            new_line_id = d.oval(x1 + speed, y1, x2 + speed, y2, line_color)
+            new_line_id = d.line(x1 + speed, y1, x2 + speed, y2, color=line_color, width=width)
             new_dict[new_line_id] = (x1 + speed, y1, x2 + speed, y2, line_color)
         else:
             new_dict[line] = lines[line]
@@ -98,10 +99,10 @@ def move_lines():
     for line in lines.keys():
         d.delete(line)
         x1, y1, x2, y2, line_color = lines[line]
-        if y2 + speed > 490:
+        if y2 + speed > 490 + size:
             continue
         #new_color = shape_color_scheme[color2] if random.randint(0, 1) else line_color
-        new_line_id = d.oval(x1, y1 + speed, x2, y2 + speed, color=line_color)
+        new_line_id = d.line(x1, y1 + speed, x2, y2 + speed, color=line_color, width=width)
         new_dict[new_line_id] = (x1, y1 + speed, x2, y2 + speed, line_color)
     lines = copy.deepcopy(new_dict)
 
@@ -118,7 +119,7 @@ if __name__ == '__main__':
 
     # app settings
     app = App('installation art', bg=bg_color_scheme[color])
-    #app.set_full_screen()
+    app.set_full_screen()
 
     # start drawing
     d = Drawing(app, width="fill", height="fill")

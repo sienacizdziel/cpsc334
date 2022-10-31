@@ -39,15 +39,12 @@ def general_callback():
     prev_touch1, prev_touch2, prev_touch3 = touch1, touch2, touch3
     prev_light1, prev_light2 = light1, light2
     touch1, touch2, touch3, light1, light2 = int(data[0]), int(data[1]), int(data[2]), int(data[3]), int(data[4])
-    #print(touch1, touch2, touch3, light1, light2)
     
     # update colors and add points by touch
     if prev_touch1 > touch1 + touch_change:
-        print("touch 1")
         app.bg = bg_color_scheme[color]
         color = (color + 1) % num_colors1
     if prev_touch2 > touch2 + touch_change:
-        print("touch 2")
         x = random.randint(0, 700)
         line_id = d.line(x, -size, x, 0, color=shape_color_scheme[color2], width=width)
         lines[line_id] = (x, -size, x, 0, shape_color_scheme[color2])
@@ -68,7 +65,6 @@ def general_callback():
     # movement affects line shift speed
     light_sensitivity = 15
     speed = 5
-    print(prev_light1, light1, prev_light2, light2)
     if prev_light1 > light1 + light1 / light_sensitivity or prev_light1 < light1 / light_sensitivity:
         speed = -speed
     elif prev_light2 > light2 + light2 / light_sensitivity or prev_light2 < light2 / light_sensitivity:

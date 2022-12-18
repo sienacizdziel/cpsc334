@@ -1,7 +1,7 @@
 # Final Project: Marble Battle
 ## Siena Cizdziel
 
-![game image](https://github.com/sienacizdziel/cpsc334/final-project/Screen Shot 2022-12-17 at 5.57.20 PM.png)
+![game image](https://github.com/sienacizdziel/cpsc334/final-project/image.png)
 
 ## Intro && Gameplay
 

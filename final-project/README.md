@@ -12,4 +12,5 @@ To turn off the game, simply unplug everything.
 
 ## Code Design
 
-## Video Links
+## Video
+https://youtu.be/Tn2R0LLsmZs

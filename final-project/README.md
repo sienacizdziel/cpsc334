@@ -1,7 +1,7 @@
 # Final Project: Marble Battle
 ## Siena Cizdziel
 
-![game image](https://github.com/sienacizdziel/cpsc334/final-project/image.png)
+![game image](https://github.com/sienacizdziel/cpsc334/final-project/image.png?raw=true)
 
 ## Intro && Gameplay
 

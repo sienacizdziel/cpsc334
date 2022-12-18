@@ -1,7 +1,10 @@
 # Final Project: Marble Battle
 ## Siena Cizdziel
 
+![game image](https://github.com/sienacizdziel/cpsc334/final-project/Screen Shot 2022-12-17 at 5.57.20 PM.png)
+
 ## Intro && Gameplay
+
 Marble Battle is a 2-player competitive interactive game that resembles pong (the video game) but in real life and with marbles! Each player has a controller with two buttons, one to flip your paddle and the other to "shake it up!", which shakes the board in case the marble gets stuck. To play, hit the marble back and forth across the board, defending your own goal and aiming to hit the marble into your opponent's goal. Once a point is scored, no more points can be scored until a paddle moves again (i.e. gameplay has continued), to prevent accidental repeat points. To win, score more points than your opponent!
 
 To start the game, plug in the game board (a USB-C cord) to a computer. If you also want to see scoring, plug in the Raspberry Pi to an outlet, and the display should boot up and run the program automatically. To start the scoring, tap on the screen when it shows a blue button labeled “Start”.
